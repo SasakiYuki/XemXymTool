@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
               currentIndex: index,
               items: [
                 _buildBottomNavigationBarItem(0, 'HOME', index),
-                _buildBottomNavigationBarItem(1, 'HOME', index),
+                _buildBottomNavigationBarItem(1, 'RECEIVE', index),
                 _buildBottomNavigationBarItem(2, 'HOME', index),
                 _buildBottomNavigationBarItem(3, 'HOME', index),
               ],
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         icon = Icons.home;
         break;
       case 1:
-        icon = Icons.ac_unit;
+        icon = Icons.qr_code;
         break;
       case 2:
         icon = Icons.ac_unit;
