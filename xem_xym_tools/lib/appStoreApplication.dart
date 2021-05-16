@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:logging/logging.dart';
+import 'package:xem_xym_tools/repository/zaifRepository.dart';
 
 import 'appRoutes.dart';
 import 'application.dart';
@@ -7,11 +8,13 @@ import 'utility/log.dart';
 
 class AppStoreApplication implements Application {
   FluroRouter router;
+  ZaifRepository zaifRepository;
 
   @override
   void onCreate() async {
     _initLog();
     _initRouter();
+    initRepository();
     await _initDB();
   }
 
@@ -31,5 +34,9 @@ class AppStoreApplication implements Application {
     Log.init();
 
     Log.setLevel(Level.ALL);
+  }
+
+  void initRepository() {
+    zaifRepository = ZaifRepository();
   }
 }

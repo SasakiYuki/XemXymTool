@@ -14,5 +14,6 @@ class AppRoutes {
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
       print('ROUTE WAS NOT FOUND !!!');
     });
+    router.define(HomePage.PATH, handler: rootHandler);
   }
 }

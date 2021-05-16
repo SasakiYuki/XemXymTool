@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../appProvider.dart';
+import 'dashboard/dashboardPage.dart';
 import 'homeBloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,26 +14,53 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  HomeBloc bloc;
+  HomeBloc _bloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _init();
+  }
 
   @override
   void dispose() {
     super.dispose();
-    bloc.dispose();
+    _bloc.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Text(""),
-    );
-  }
+  Widget build(BuildContext context) => StreamBuilder<int>(
+        stream: _bloc.bottomNavigationState,
+        builder: (_, snapshot) {
+          final index = snapshot.hasData ? snapshot.data : 0;
+
+          List<Widget> _pageList = [
+            DashboardPage(),
+          ];
+
+          return Scaffold(
+            body: _pageList[index],
+            bottomNavigationBar: BottomNavigationBar(
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: index,
+              items: [
+                _buildBottomNavigationBarItem(0, 'HOME', index),
+                _buildBottomNavigationBarItem(1, 'HOME', index),
+                _buildBottomNavigationBarItem(2, 'HOME', index),
+                _buildBottomNavigationBarItem(3, 'HOME', index),
+              ],
+              onTap: (value) => _bloc.navigateBottomNavigation(value),
+            ),
+          );
+        },
+      );
 
   void _init() {
-    if (null == bloc) {
-      bloc = HomeBloc(AppProvider.getApplication(context));
-      bloc.isShowLoading.listen((bool isLoading) {
+    if (null == _bloc) {
+      _bloc = HomeBloc(AppProvider.getApplication(context));
+      _bloc.isShowLoading.listen((bool isLoading) {
         if (isLoading) {
           // TODO
         } else {
@@ -41,5 +69,30 @@ class _HomePageState extends State<HomePage> {
       });
       // load
     }
+  }
+
+  BottomNavigationBarItem _buildBottomNavigationBarItem(
+      num position, String title, int currentIndex) {
+    var selectedColor = Colors.amber;
+    var unselectedColor = Colors.black38;
+    var icon;
+    switch (position) {
+      case 0:
+        icon = Icons.home;
+        break;
+      case 1:
+        icon = Icons.ac_unit;
+        break;
+      case 2:
+        icon = Icons.ac_unit;
+        break;
+      case 3:
+        icon = Icons.person_rounded;
+        break;
+    }
+    return BottomNavigationBarItem(
+        icon: Icon(icon,
+            color: currentIndex == position ? selectedColor : unselectedColor),
+        label: title);
   }
 }
