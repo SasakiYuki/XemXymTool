@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xem_xym_tools/ui/recieve/receiveTopPage.dart';
 
 import '../appProvider.dart';
 import 'dashboard/dashboardPage.dart';
@@ -34,9 +35,7 @@ class _HomePageState extends State<HomePage> {
         builder: (_, snapshot) {
           final index = snapshot.hasData ? snapshot.data : 0;
 
-          List<Widget> _pageList = [
-            DashboardPage(),
-          ];
+          List<Widget> _pageList = [DashboardPage(), ReceiveTopPage()];
 
           return Scaffold(
             body: _pageList[index],
