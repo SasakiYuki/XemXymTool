@@ -5,6 +5,7 @@ import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/lastPrice.dart';
 import 'package:xem_xym_tools/ui/common/SpaceBox.dart';
 import 'package:xem_xym_tools/ui/dashboard/dashboardBloc.dart';
+import 'package:xem_xym_tools/utility/sizeConfig.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -22,6 +23,7 @@ class _DashboardState extends State<DashboardPage> {
   }
 
   void _init() {
+    SizeConfig().init(context);
     if (null == _bloc) {
       _bloc = DashboardBloc(AppProvider.getApplication(context));
     }

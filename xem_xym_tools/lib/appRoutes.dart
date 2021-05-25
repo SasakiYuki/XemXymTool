@@ -1,11 +1,17 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:xem_xym_tools/ui/recieve/amount/receiveAmountPage.dart';
 
 import 'ui/homePage.dart';
 
 var rootHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<String>> params) {
   return HomePage();
+});
+
+var receiveAmountHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+  return ReceiveAmountPage();
 });
 
 class AppRoutes {
@@ -15,5 +21,6 @@ class AppRoutes {
       print('ROUTE WAS NOT FOUND !!!');
     });
     router.define(HomePage.PATH, handler: rootHandler);
+    router.define(ReceiveAmountPage.PATH, handler: receiveAmountHandler);
   }
 }

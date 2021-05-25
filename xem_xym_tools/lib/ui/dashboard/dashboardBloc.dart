@@ -24,7 +24,7 @@ class DashboardBloc {
 
   void getLastPrice() async {
     final subscription =
-        Observable.fromFuture(_application.zaifRepository.getLastPrice())
+        Observable.fromFuture(_application.zaifRepository.getXemLastPrice())
             .listen((event) {
       _lastPrice.value = event;
     });

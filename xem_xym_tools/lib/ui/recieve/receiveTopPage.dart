@@ -1,9 +1,11 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/GenerateType.dart';
 import 'package:xem_xym_tools/ui/common/SpaceBox.dart';
+import 'package:xem_xym_tools/ui/recieve/amount/receiveAmountPage.dart';
 import 'package:xem_xym_tools/ui/recieve/receiveTopBloc.dart';
 
 class ReceiveTopPage extends StatefulWidget {
@@ -38,9 +40,9 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
         body: CustomScrollView(
           slivers: [
             _buildQrImage(),
-            _buildSpaceBoxHeight(8),
+            _buildSpaceBoxHeight(4),
             _buildCryptSelector(),
-            _buildSpaceBoxHeight(16),
+            _buildSpaceBoxHeight(8),
             _buildDivider(),
             _buildAddress(),
             _buildDivider(),
@@ -57,7 +59,7 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
           child: QrImage(
             data: '123455',
             version: QrVersions.auto,
-            size: 200,
+            size: 140,
           ),
         ),
       );
@@ -66,7 +68,6 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
         child: InkWell(
           onTap: () {},
           child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: ListTile(
               leading: Icon(
                 Icons.menu_book,
@@ -75,7 +76,7 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
               ),
               title: Text(
                 "Select Address",
-                style: TextStyle(fontSize: 16, color: Color(0x99000000)),
+                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
               ),
             ),
           ),
@@ -84,9 +85,12 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
 
   Widget _buildAmount() => SliverToBoxAdapter(
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            AppProvider.getRouter(context).navigateTo(
+                context, ReceiveAmountPage.PATH,
+                transition: TransitionType.native);
+          },
           child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: ListTile(
               leading: Icon(
                 Icons.payments,
@@ -95,7 +99,7 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
               ),
               title: Text(
                 "Amount",
-                style: TextStyle(fontSize: 16, color: Color(0x99000000)),
+                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
               ),
             ),
           ),
@@ -106,7 +110,6 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
         child: InkWell(
           onTap: () {},
           child: Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: ListTile(
               leading: Icon(
                 Icons.notes,
@@ -115,7 +118,7 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
               ),
               title: Text(
                 "Add Message/Memo",
-                style: TextStyle(fontSize: 16, color: Color(0x99000000)),
+                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
               ),
             ),
           ),
@@ -124,17 +127,23 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
 
   Widget _buildCryptSelector() => SliverToBoxAdapter(
         child: Container(
-          margin: EdgeInsets.only(left: 40, right: 40),
+          margin: EdgeInsets.only(left: 60, right: 60),
           child: DropdownButtonFormField(
             value: generateTypes.first,
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.only(left: 8, right: 5, top: 0, bottom: 0),
+                border: OutlineInputBorder()),
             isDense: true,
             items: generateTypes.map((GenerateType generateType) {
               return new DropdownMenuItem(
                   value: generateType,
                   child: Row(
                     children: <Widget>[
-                      Text(generateType.name),
+                      Text(
+                        generateType.name,
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ],
                   ));
             }).toList(),
