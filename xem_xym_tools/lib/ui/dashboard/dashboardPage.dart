@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/lastPrice.dart';
-import 'package:xem_xym_tools/ui/common/SpaceBox.dart';
+import 'package:xem_xym_tools/ui/common/spaceBox.dart';
 import 'package:xem_xym_tools/ui/dashboard/dashboardBloc.dart';
 import 'package:xem_xym_tools/utility/sizeConfig.dart';
 

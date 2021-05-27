@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/lastPrice.dart';
-import 'package:xem_xym_tools/ui/common/SpaceBox.dart';
-import 'package:xem_xym_tools/ui/recieve/amount/ReceiveAmountBloc.dart';
+import 'package:xem_xym_tools/ui/common/spaceBox.dart';
+import 'package:xem_xym_tools/ui/recieve/amount/receiveAmountBloc.dart';
 import 'package:xem_xym_tools/utility/sizeConfig.dart';
 
 class ReceiveAmountPage extends StatefulWidget {
