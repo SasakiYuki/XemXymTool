@@ -9,6 +9,8 @@ import 'package:xem_xym_tools/utility/sizeConfig.dart';
 
 class ReceiveAmountPage extends StatefulWidget {
   static const String PATH = '/receive_amount';
+  static const String IS_XYM_MODE = 'is_xym_mode';
+  static const String AMOUNT = 'amount';
 
   ReceiveAmountPage({Key key}) : super(key: key);
 
@@ -21,6 +23,7 @@ class _ReceiveAmountState extends State<ReceiveAmountPage>
   ReceiveAmountBloc _bloc;
   TabController _tabController;
   TextEditingController _amountEditingController = TextEditingController();
+  TextEditingController _xemXymEditingController = TextEditingController();
   Image _xymAssetImage =
       Image(width: 30, height: 30, image: AssetImage('images/symbol.png'));
   Image _xemAssetImage =
@@ -56,6 +59,27 @@ class _ReceiveAmountState extends State<ReceiveAmountPage>
         headerSliverBuilder: (context, value) {
           return [
             SliverAppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    var isXymMode = _bloc.getXymMode();
+                    var amount = 0.0;
+                    if (_tabController.index == 0) {
+                      amount = _bloc.getAmountFromYen();
+                    } else {
+                      amount = double.parse(_xemXymEditingController.text);
+                    }
+                    Navigator.of(context).pop({
+                      ReceiveAmountPage.IS_XYM_MODE: isXymMode,
+                      ReceiveAmountPage.AMOUNT: amount
+                    });
+                  },
+                )
+              ],
               iconTheme: IconThemeData(color: Colors.white),
               title: Text(
                 'Enter Amount',
@@ -73,12 +97,56 @@ class _ReceiveAmountState extends State<ReceiveAmountPage>
   Widget _tabBody() {
     return TabBarView(
       controller: _tabController,
-      children: [
-        _buildYenBody(),
-        Container(child: Center(child: Icon(Icons.car_rental))),
-      ],
+      children: [_buildYenBody(), _buildXemXymBody()],
     );
   }
+
+  Widget _buildXemXymBody() => Column(
+        children: [
+          SpaceBox.height(8),
+          Container(
+            child: _buildXemXymTextField(),
+          ),
+          SpaceBox.height(32),
+          _buildWatchListHeader(),
+          SpaceBox.height(8),
+          _buildDivider(),
+          _buildXemWatchListRow(),
+          _buildDivider(),
+          _buildXymWatchListRow(),
+          _buildDivider(),
+        ],
+      );
+
+  Widget _buildXemXymTextField() => StreamBuilder<bool>(
+      stream: _bloc.isXymMode,
+      builder: (context, snapshot) {
+        var suffix = '';
+        if (snapshot.hasData) {
+          if (snapshot.data) {
+            suffix = 'ＸＹＭ';
+          } else {
+            suffix = 'ＸＥＭ';
+          }
+        }
+        return TextField(
+            onChanged: (text) {},
+            controller: _xemXymEditingController,
+            inputFormatters: [ThousandsSeparatorInputFormatter()],
+            keyboardType: TextInputType.number,
+            style: TextStyle(
+              fontSize: 30,
+            ),
+            decoration: InputDecoration(
+              isDense: true,
+              suffixIcon: Text(
+                suffix,
+                style: TextStyle(fontSize: 30),
+              ),
+              prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+            ),
+            textAlign: TextAlign.right);
+      });
 
   Widget _buildYenBody() => Column(
         children: [

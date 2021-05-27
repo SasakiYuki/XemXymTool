@@ -91,4 +91,22 @@ class ReceiveAmountBloc {
       _currentCurrencyAmount.add(text);
     }
   }
+
+  bool getXymMode() => _isXymMode.value;
+
+  int getAmount() => _amount.value;
+
+  double getAmountFromYen() {
+    var amount = getAmount();
+    var isXymMode = _isXymMode.value;
+    if (isXymMode) {
+      var xymPrice = _xymLastPrice.value;
+      var price = (amount / xymPrice.lastPrice).toStringAsFixed(4);
+      return double.parse(price);
+    } else {
+      var xemPrice = _xemLastPrice.value;
+      var price = (amount / xemPrice.lastPrice).toStringAsFixed(4);
+      return double.parse(price);
+    }
+  }
 }

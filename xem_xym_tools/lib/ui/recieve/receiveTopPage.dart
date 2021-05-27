@@ -40,8 +40,6 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
         body: CustomScrollView(
           slivers: [
             _buildQrImage(),
-            _buildSpaceBoxHeight(4),
-            _buildCryptSelector(),
             _buildSpaceBoxHeight(8),
             _buildDivider(),
             _buildAddress(),
@@ -85,10 +83,19 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
 
   Widget _buildAmount() => SliverToBoxAdapter(
         child: InkWell(
-          onTap: () {
-            AppProvider.getRouter(context).navigateTo(
+          onTap: () async {
+            Map results = await AppProvider.getRouter(context).navigateTo(
                 context, ReceiveAmountPage.PATH,
                 transition: TransitionType.native);
+
+            if (results != null) {
+              if (results.containsKey(ReceiveAmountPage.IS_XYM_MODE)) {
+                _bloc.changeXymMode(results[ReceiveAmountPage.IS_XYM_MODE]);
+              }
+              if (results.containsKey(ReceiveAmountPage.AMOUNT)) {
+                _bloc.changeAmount(results[ReceiveAmountPage.AMOUNT]);
+              }
+            }
           },
           child: Container(
             child: ListTile(
@@ -97,10 +104,30 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
                 color: Colors.amber,
                 size: 24,
               ),
-              title: Text(
-                "Amount",
-                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
-              ),
+              title: StreamBuilder<double>(
+                  stream: _bloc.amount,
+                  builder: (context, snapshot) {
+                    var text = 'Amount';
+                    var amount = 0.0;
+                    if (snapshot.hasData) {
+                      if (snapshot.data != 0) {
+                        text = snapshot.data.toString();
+                        amount = snapshot.data;
+                      }
+                    }
+                    return StreamBuilder<bool>(
+                        stream: _bloc.isXymMode,
+                        builder: (context, isXymSnapshot) {
+                          if (isXymSnapshot.hasData && amount != 0.0) {
+                            text = text + (isXymSnapshot.data ? 'XYM' : 'XEM');
+                          }
+                          return Text(
+                            text,
+                            style: TextStyle(
+                                fontSize: 14, color: Color(0x99000000)),
+                          );
+                        });
+                  }),
             ),
           ),
         ),
