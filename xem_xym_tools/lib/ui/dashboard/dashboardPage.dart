@@ -90,8 +90,7 @@ class _DashboardState extends State<DashboardPage> {
                       'Get started with Address',
                       style: TextStyle(color: Colors.white),
                     ),
-                    style:
-                        ElevatedButton.styleFrom(primary: Colors.blueAccent),
+                    style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
                     onPressed: () {},
                   ),
                 ),
@@ -127,7 +126,7 @@ class _DashboardState extends State<DashboardPage> {
                     SpaceBox.height(8),
                     Text(
                       'Any sufficiently advanced technology is indistinguishable from magic.',
-                      style: TextStyle(color: Colors.white54,fontSize: 15),
+                      style: TextStyle(color: Colors.white54, fontSize: 15),
                     )
                   ],
                 ),
@@ -153,27 +152,35 @@ class _DashboardState extends State<DashboardPage> {
         ),
       );
 
-  Widget _buildXymWatchListRow() => SliverToBoxAdapter(
-        child: Container(
-            margin: EdgeInsets.only(left: 8, right: 8),
-            child: ListTile(
-              leading: Image(
-                width: 30,
-                height: 30,
-                image: AssetImage(
-                  'images/symbol.png',
+  Widget _buildXymWatchListRow() => StreamBuilder<LastPrice>(
+      stream: _bloc.xymLastPrice,
+      builder: (context, snapshot) {
+        var text = '';
+        if (snapshot.hasData) {
+          text = snapshot.data.lastPrice.toString();
+        }
+        return SliverToBoxAdapter(
+          child: Container(
+              margin: EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Image(
+                  width: 30,
+                  height: 30,
+                  image: AssetImage(
+                    'images/symbol.png',
+                  ),
                 ),
-              ),
-              title: Text(
-                'XYM',
-                style: TextStyle(fontSize: 16, color: Color(0xDE000000)),
-              ),
-              trailing: Text(
-                'zaif待ち',
-                style: TextStyle(fontSize: 16, color: Color(0xDE000000)),
-              ),
-            )),
-      );
+                title: Text(
+                  'XYM',
+                  style: TextStyle(fontSize: 16, color: Color(0xDE000000)),
+                ),
+                trailing: Text(
+                  '$text円',
+                  style: TextStyle(fontSize: 16, color: Color(0xDE000000)),
+                ),
+              )),
+        );
+      });
 
   Widget _buildXemWatchListRow() => StreamBuilder<LastPrice>(
       stream: _bloc.lastPrice,
