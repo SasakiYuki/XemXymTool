@@ -1,8 +1,10 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/lastPrice.dart';
+import 'package:xem_xym_tools/ui/address/addressRegistrationPage.dart';
 import 'package:xem_xym_tools/ui/common/spaceBox.dart';
 import 'package:xem_xym_tools/ui/dashboard/dashboardBloc.dart';
 import 'package:xem_xym_tools/utility/sizeConfig.dart';
@@ -91,7 +93,11 @@ class _DashboardState extends State<DashboardPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(primary: Colors.blueAccent),
-                    onPressed: () {},
+                    onPressed: () {
+                      AppProvider.getRouter(context).navigateTo(
+                          context, AddressRegistrationPage.PATH,
+                          transition: TransitionType.native);
+                    },
                   ),
                 ),
               ),
@@ -111,29 +117,33 @@ class _DashboardState extends State<DashboardPage> {
           ),
           child: Row(
             children: [
-              Container(
-                width: 200,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Menu List',
-                          style: TextStyle(color: Colors.white, fontSize: 30),
-                        ),
-                      ],
-                    ),
-                    SpaceBox.height(8),
-                    Text(
-                      'Any sufficiently advanced technology is indistinguishable from magic.',
-                      style: TextStyle(color: Colors.white54, fontSize: 15),
-                    )
-                  ],
+              Expanded(
+                flex: 1,
+                child: Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Menu List',
+                            style: TextStyle(color: Colors.white, fontSize: 30),
+                          ),
+                        ],
+                      ),
+                      SpaceBox.height(8),
+                      Text(
+                        'Any sufficiently advanced technology is indistinguishable from magic.',
+                        style: TextStyle(color: Colors.white54, fontSize: 13),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              SvgPicture.asset(
-                'assets/top_menu.svg',
-                height: 130,
+              Expanded(
+                child: SvgPicture.asset(
+                  'assets/top_menu.svg',
+                  height: 130,
+                ),
               )
             ],
           ),

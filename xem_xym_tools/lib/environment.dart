@@ -1,3 +1,4 @@
+import 'package:appspector/appspector.dart';
 import 'package:flutter/material.dart';
 
 import 'appComponent.dart';
@@ -19,9 +20,24 @@ class Environment {
 
   void _init() async {
     WidgetsFlutterBinding.ensureInitialized();
-
     var application = AppStoreApplication();
     await application.onCreate();
+    _runAppSpector();
     runApp(AppComponent(application));
+  }
+
+  void _runAppSpector() {
+    final config = Config()
+      ..iosApiKey = ""
+      ..androidApiKey =
+          "android_ZmZiYjBkYzQtYjU2Mi00MTUwLTg5ZTQtMDMyZWM3NmVjMGI2"
+      ..monitors = [
+        Monitors.screenshot,
+        Monitors.sqLite,
+        Monitors.sharedPreferences,
+        Monitors.userDefaults,
+      ];
+
+    AppSpectorPlugin.run(config);
   }
 }
