@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:xem_xym_tools/appProvider.dart';
 import 'package:xem_xym_tools/model/generateType.dart';
+import 'package:xem_xym_tools/model/walletAddress.dart';
 import 'package:xem_xym_tools/ui/common/spaceBox.dart';
+import 'package:xem_xym_tools/ui/recieve/address/addressSelectPage.dart';
 import 'package:xem_xym_tools/ui/recieve/amount/receiveAmountPage.dart';
+import 'package:xem_xym_tools/ui/recieve/memo/memoEditPage.dart';
 import 'package:xem_xym_tools/ui/recieve/receiveTopBloc.dart';
 
 class ReceiveTopPage extends StatefulWidget {
@@ -64,7 +67,16 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
 
   Widget _buildAddress() => SliverToBoxAdapter(
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            Map result = await AppProvider.getRouter(context).navigateTo(
+                context, AddressSelectPage.PATH,
+                transition: TransitionType.native);
+            if (result != null &&
+                result.containsKey(AddressSelectPage.ADDRESS)) {
+              _bloc.changeSelectedWalletAddress(
+                  result[AddressSelectPage.ADDRESS]);
+            }
+          },
           child: Container(
             child: ListTile(
               leading: Icon(
@@ -72,10 +84,18 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
                 color: Colors.amber,
                 size: 24,
               ),
-              title: Text(
-                "Select Address",
-                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
-              ),
+              title: StreamBuilder<WalletAddress>(
+                  stream: _bloc.selectedWalletAddress,
+                  builder: (context, snapshot) {
+                    var text = 'Select Address';
+                    if (snapshot.data != null) {
+                      text = snapshot.data.address;
+                    }
+                    return Text(
+                      text,
+                      style: TextStyle(fontSize: 14, color: Color(0x99000000)),
+                    );
+                  }),
             ),
           ),
         ),
@@ -135,7 +155,16 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
 
   Widget _buildMessage() => SliverToBoxAdapter(
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            Map<String, String> params = {MemoEditPage.MEMO: _bloc.getMemo()};
+            Uri uri = Uri(path: MemoEditPage.PATH, queryParameters: params);
+            Map result = await AppProvider.getRouter(context).navigateTo(
+                context, uri.toString(),
+                transition: TransitionType.native);
+            if (result != null && result.containsKey(MemoEditPage.MEMO)) {
+              _bloc.changeMemo(result[MemoEditPage.MEMO]);
+            }
+          },
           child: Container(
             child: ListTile(
               leading: Icon(
@@ -143,10 +172,18 @@ class _ReceiveTopState extends State<ReceiveTopPage> {
                 color: Colors.amber,
                 size: 24,
               ),
-              title: Text(
-                "Add Message/Memo",
-                style: TextStyle(fontSize: 14, color: Color(0x99000000)),
-              ),
+              title: StreamBuilder<String>(
+                  stream: _bloc.memo,
+                  builder: (context, snapshot) {
+                    var text = 'Add Message/Memo';
+                    if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                      text = snapshot.data;
+                    }
+                    return Text(
+                      text,
+                      style: TextStyle(fontSize: 14, color: Color(0x99000000)),
+                    );
+                  }),
             ),
           ),
         ),

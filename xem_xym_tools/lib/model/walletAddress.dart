@@ -6,7 +6,7 @@ part 'walletAddress.g.dart';
 class WalletAddress {
   static final String TABLE_NAME = 'wallet_address';
 
-  int id = 0;
+  int id;
   final String name;
   final String address;
 
